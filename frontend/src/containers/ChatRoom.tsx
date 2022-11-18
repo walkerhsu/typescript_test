@@ -29,7 +29,7 @@ const ChatBoxWrapper = styled.div`
 const FootRef = styled.div`
     height: 20px;
 `;
-interface ChatBoxProps {
+interface IChatBox {
     label: string,
     children: React.ReactNode,
     key: string,
@@ -43,13 +43,12 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
     const {messages, setMessages, sendMessage, startChat, displayStatus } = useChat();
     // const [username, setUsername] = useState('')
     const [msg, setMsg] = useState<string>('')
-    const [activeKey, setActiveKey] = useState<number>(0);
-    const [chatBoxes, setChatBoxes] = useState<ChatBoxProps[]>([]);
+    const [activeKey, setActiveKey] = useState<string>('');
+    const [chatBoxes, setChatBoxes] = useState<IChatBox[]>([]);
     const [msgSent, setMsgSent] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     
-    const msgRef = useRef(null)
-    const msgFooter = useRef(null);
+    const msgFooter = useRef<HTMLDivElement>(null);
     const makeName = (name1: string, name2: string): string => {return [name1, name2].sort().join("_")}
     const findChatBox = (targetKey: string) => {
         for(let i = 0; i < chatBoxes.length; i++){        
@@ -68,13 +67,13 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
         ) : (
             <ChatBoxWrapper>
                 {chat.map(({ name, body }: IsingleMsg, i: number) => (
-                    <Message isMe={name === me} message={body}  key_number={i} />
+                    <Message isMe={name === me} message={body} />
                 ))}
                 <FootRef ref={msgFooter}/>
             </ChatBoxWrapper>
         ))
     }
-    const createChatBox = (name) => {
+    const createChatBox = (name: string) => {
         console.log("Creating chatbox for " + name);
         if (chatBoxes.some(({label}) => label === name)) {
             throw new Error(name +
@@ -106,7 +105,7 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
         setChatBoxes(newChatBoxes)
     }
     
-    const removeChatBox = (targetKey, activeKey) =>{
+    const removeChatBox = (targetKey: string, activeKey: string) =>{
         let lastIndex = 0;
         chatBoxes.forEach((pane, i) => {
             if (pane.key === targetKey ) {
@@ -141,16 +140,18 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
         updateChatBoxes();
     },[messages[chatBoxes[findChatBox(activeKey)]?.label]]);
   
-    const onChange = (newActiveKey) => {
+    const onChange = (newActiveKey: string) => {
         startChat(me, chatBoxes[findChatBox(newActiveKey)]?.label );
         setActiveKey(newActiveKey);
     };
 
-    const onEdit = (targetKey, action) => {
+    const onEdit = (targetKey: any, action: string): void => {
         if (action === 'add') {
           setModalOpen(true);
         } else if (action === 'remove') {
-          removeChatBox(targetKey, activeKey);
+          if(typeof(targetKey) === 'string'){
+            removeChatBox(targetKey, activeKey); 
+          } 
         }
     };
     // useEffect(() => {
@@ -159,9 +160,6 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
     return (
     <>
         <Title name={me} />
-        <Button type="primary" danger onClick={clearMessages} >
-            Clear
-        </Button>
         <ChatBoxesWrapper
             tabBarStyle={{height: '36px'}}
             type="editable-card"
@@ -180,34 +178,22 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
             }}
             onCancel={() => setModalOpen(false)}
         />
-        
-        {/* <Input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-                msgRef.current.focus()
-            }}}
-            style={{ marginBottom: 10 }}
-        ></Input> */}
         <Input.Search
             value={msg}
-            ref={msgRef}
             onChange={(e) => setMsg(e.target.value)}
             enterButton="Send"
             placeholder="Type a message here..."
             onSearch={(msg) => {
-            if (!msg) {
-                displayStatus({
-                type: 'error',
-                msg: 'Please enter a message body.'
-                })
-                return
-            }
-            sendMessage(me, chatBoxes[findChatBox(activeKey)].label, msg )
-            setMsg('')
-            setMsgSent(true)
+                if (!msg) {
+                    displayStatus({
+                        type: 'error',
+                        msg: 'Please enter a message body.'
+                    })
+                    return
+                }
+                sendMessage(me, chatBoxes[findChatBox(activeKey)].label, msg )
+                setMsg('')
+                setMsgSent(true)
             }}
         ></Input.Search>
     </>
