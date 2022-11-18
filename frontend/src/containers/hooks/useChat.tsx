@@ -1,47 +1,16 @@
 import { createContext, useContext, useEffect, useState} from "react"
 import React from "react";
 import { message } from 'antd'
+import {ContextInterface} from "../interface";
+import {IStatus} from "../interface";
+import {IMessage} from "../interface";
+import {IPayload} from "../interface";
+import {IData} from "../interface";
+import {IUseChatProps} from "../interface";
 
 const client = new WebSocket ('ws://localhost:4000')
 const LOCALSTORAGE_KEY = "My";
 const savedMe = localStorage.getItem(LOCALSTORAGE_KEY);
-
-
-interface ContextInterface {
-    status: Status;
-    me: string,
-    messages: Message,
-    signedIn: boolean,
-
-    setMe: (name: string) => void,
-    setSignedIn: (signedIn: boolean) => void,
-    setMessages: (messages: Message) => void,
-    sendMessage: (name: string, to: string, body: string) => void,
-    startChat : (name: string, to: string) => void,
-    displayStatus: (s: Status) => void,
-}
-interface Status {
-    type?: string;
-    msg?: string;
-}
-interface singleMsg {
-    name: string;
-    body: string;
-}
-interface Message {
-    [key: string]: singleMsg[];
-}
-interface Payload{
-    name?: string; // username
-    to?: string; // friend name
-    body?: string | singleMsg[]; // message body
-    type?: string; // status type
-    msg?: string; // status message
-}
-interface Data {
-    task: string;
-    payload: Payload;
-}
 
 const ChatContext = createContext<ContextInterface>({
     status: {},
@@ -56,11 +25,12 @@ const ChatContext = createContext<ContextInterface>({
     startChat : () =>{},
     displayStatus: () => {},
 });
-const ChatProvider = (props)=> {
-    const [status, setStatus] = useState<Status>({});
+
+const ChatProvider = (props: IUseChatProps)=> {
+    const [status, setStatus] = useState<IStatus>({});
     const [me, setMe] = useState(savedMe || '');
     const [signedIn, setSignedIn] = useState(false);
-    const [messages, setMessages] = useState<Message>({}); 
+    const [messages, setMessages] = useState<IMessage>({}); 
     // { title : [{name: , body: } , {name: , body: }] }
     
     // const [friendNumbers, setFriendNumbers] = useState(0);
@@ -71,7 +41,7 @@ const ChatProvider = (props)=> {
         }
     }, [signedIn]);
     
-    const displayStatus = (s: Status) => {
+    const displayStatus = (s: IStatus) => {
         if (s.type && s.msg ) {
           const { type, msg } = s;
           const content = {content: msg, duration: 0.5}
@@ -103,20 +73,20 @@ const ChatProvider = (props)=> {
                             (name : ${name}, to : ${to}, body : ${body}) `);
         }
         console.log("sending message...");
-        const data: Data = {
+        const data: IData = {
             task: "MESSAGE",
             payload: {name, to, body}
         }
         sendData(data);
     }
     
-    const sendData = async (data: Data) => {
+    const sendData = async (data: IData) => {
         await client.send(JSON.stringify(data));
     };
     
     client.onmessage = (byteString) => {
         let task: string
-        let payload: Payload;
+        let payload: IPayload;
         const { data } = byteString;
         
         [task, payload] = JSON.parse(data);
@@ -185,9 +155,9 @@ const ChatProvider = (props)=> {
     }
     return (
         <ChatContext.Provider
-            value={{
+            value={
                 value
-            }}
+            }
             {...props}
         />
     );

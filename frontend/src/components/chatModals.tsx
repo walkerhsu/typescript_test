@@ -1,6 +1,12 @@
 import {Modal, Input, Form} from 'antd';
+import React from 'react';
 
-const ChatModal = ({open, onCreate, onCancel}) =>{
+type TChatModalProps = {
+    open: boolean,
+    onCreate: (values: {name: string}) => void,
+    onCancel: () => void,
+}
+const ChatModal = ({open, onCreate, onCancel}: TChatModalProps) =>{
     const [form] = Form.useForm();
     return (
         <Modal 

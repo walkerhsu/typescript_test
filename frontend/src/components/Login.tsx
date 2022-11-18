@@ -1,7 +1,13 @@
 import {Input} from 'antd'
 import {UserOutlined} from '@ant-design/icons'
+import React from 'react'
 
-const LogIn = ({me, setName, onLogin}) => {
+type TLogInProps = {
+    me: string,
+    setName: (name: string) => void,
+    onLogin: (signedIn: string) => void,
+}
+const LogIn = ({me, setName, onLogin}: TLogInProps) => {
     return (
         <Input.Search
             size="large"

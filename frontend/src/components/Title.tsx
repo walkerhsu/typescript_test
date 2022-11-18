@@ -11,8 +11,11 @@ const Wrapper = styled.div`
         font-size: 3em;
     }
 `;
+type TTitleProps = {
+    name: string,
+}
 
-const Title = ({name}) =>{
+const Title = ({name}: TTitleProps) =>{
     return (
         <Wrapper><h1>{name?`${name}'s`:"My"} Chat Room</h1></Wrapper>
     );

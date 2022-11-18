@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
-import {Input, Tag, Button, Tabs} from 'antd'
+import styled from 'styled-components';
+import {Input, Button, Tabs} from 'antd'
+import React from "react";
 
 import {useChat} from "./hooks/useChat";
 import Title from '../components/Title';
 import ChatModal from '../components/chatModals';
 import Message from "../components/Message";
+
+import { IsingleMsg } from "./interface";
 
 const ChatBoxesWrapper = styled(Tabs)`
     height: 300px;
@@ -26,20 +29,29 @@ const ChatBoxWrapper = styled.div`
 const FootRef = styled.div`
     height: 20px;
 `;
+interface ChatBoxProps {
+    label: string,
+    children: React.ReactNode,
+    key: string,
+}
 
-const ChatRoom = ({me}) =>{
-    const {messages, setMessages, sendMessage, startChat, displayStatus, clearMessages } = useChat();
+interface ChatRoomProps {
+    me: string,
+}
+
+const ChatRoom = ({me}: ChatRoomProps) =>{
+    const {messages, setMessages, sendMessage, startChat, displayStatus } = useChat();
     // const [username, setUsername] = useState('')
-    const [msg, setMsg] = useState('')
-    const [activeKey, setActiveKey] = useState(0);
-    const [chatBoxes, setChatBoxes] = useState([]);
-    const [msgSent, setMsgSent] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [msg, setMsg] = useState<string>('')
+    const [activeKey, setActiveKey] = useState<number>(0);
+    const [chatBoxes, setChatBoxes] = useState<ChatBoxProps[]>([]);
+    const [msgSent, setMsgSent] = useState<boolean>(false);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
     
     const msgRef = useRef(null)
     const msgFooter = useRef(null);
-    const makeName = (name1, name2) => {return [name1, name2].sort().join("_")}
-    const findChatBox = (targetKey) => {
+    const makeName = (name1: string, name2: string): string => {return [name1, name2].sort().join("_")}
+    const findChatBox = (targetKey: string) => {
         for(let i = 0; i < chatBoxes.length; i++){        
             if (chatBoxes[i].key === targetKey) {
                 // console.log(`found chatBox.key = ${targetKey} with index=${i}`);
@@ -49,13 +61,13 @@ const ChatRoom = ({me}) =>{
         };
         return -1;
     }
-    const displayChat = (chat) => {
+    const displayChat = (chat: IsingleMsg[]) => {
         console.log(`msg  = ${chat}`);
         return (chat.length === 0 ? (
             <p style={{ color: '#ccc' }}> No messages... </p>
         ) : (
             <ChatBoxWrapper>
-                {chat.map(({ name, body }, i) => (
+                {chat.map(({ name, body }: IsingleMsg, i: number) => (
                     <Message isMe={name === me} message={body}  key_number={i} />
                 ))}
                 <FootRef ref={msgFooter}/>

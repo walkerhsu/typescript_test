@@ -3,10 +3,10 @@ import Title from '../components/Title'
 import {useChat} from './hooks/useChat'
 import React from 'react'
 
-interface Props {
+interface SignInProps {
     me: string;
 }
-const SignIn = ({me}: Props) => {
+const SignIn = ({me}: SignInProps) => {
     // console.log(`me=${me}`);
     const {setMe, setSignedIn, displayStatus} = useChat();
     const handleLogin = (name: string): void => {

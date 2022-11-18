@@ -1,11 +1,10 @@
 import { Tag } from "antd";
 import styled from "styled-components";
 import React from "react";
-
 const StyledMessage = styled.div`
     display: flex;
     align-items: center;
-    flex-direction: ${({isMe}) => (isMe ? 'row-reverse' : 'row')};
+    flex-direction: ${({isMe}:{isMe: boolean}) => (isMe ? 'row-reverse' : 'row')};
     margin: 8px 10px;
     & p:first-child {
         margin: 0 5px;
@@ -19,7 +18,12 @@ const StyledMessage = styled.div`
         margin: auto 0;
     }
 `;
-const Message = ({ isMe, message}) => {
+
+type TMessageProps = {
+    isMe: boolean,
+    message: string,
+}
+const Message = ({ isMe, message}: TMessageProps) => {
     console.log(`isMe = ${isMe}, message = ${message}`);
     return (
         <StyledMessage isMe={isMe}>
