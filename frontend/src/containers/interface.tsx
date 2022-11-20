@@ -38,4 +38,9 @@ export interface IUseChatProps {
     children: JSX.Element;
 }
 
+export interface ITask_Payload {
+    task: string;
+    payload: IPayload;
+}
+
 

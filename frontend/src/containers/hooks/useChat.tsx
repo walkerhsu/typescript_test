@@ -7,7 +7,7 @@ import {IMessage} from "../interface";
 import {IPayload} from "../interface";
 import {IData} from "../interface";
 import {IUseChatProps} from "../interface";
-
+import {ITask_Payload} from "../interface";
 const client = new WebSocket ('ws://localhost:4000')
 const LOCALSTORAGE_KEY = "My";
 const savedMe = localStorage.getItem(LOCALSTORAGE_KEY);
@@ -85,11 +85,11 @@ const ChatProvider = (props: IUseChatProps)=> {
     };
     
     client.onmessage = (byteString) => {
-        let task: string
-        let payload: IPayload;
+        // let task: string
+        // let payload: IPayload;
         const { data } = byteString;
         
-        [task, payload] = JSON.parse(data);
+        const {task, payload}: ITask_Payload = JSON.parse(data);
         console.log(task, payload);
         switch (task) {
             case "MsgOut": {
@@ -113,7 +113,7 @@ const ChatProvider = (props: IUseChatProps)=> {
                 break;
             }
             case "ChatOut": {
-                const {name, to, body} = payload;
+                const {to, body} = payload;
                 console.log(to, body);
 
                 const newMsg = messages
