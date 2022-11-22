@@ -1,7 +1,7 @@
 import WebSocket from 'ws'
 
 import {UserModel, MessageModel, ChatBoxModel} from "./models/chatbox"
-import { IWebSocket, IPayload, IStatus, IUser, IMessage, IChatBox, ISingleMsg} from "./interface";
+import {IWebSocket, IPayload, IStatus, IUser, IMessage, IChatBox, ISingleMsg} from "./interface";
 
 type TChatBoxes = {
     [key: string]: Set<IWebSocket>;
@@ -14,7 +14,7 @@ interface IInputData {
     payload: IPayload;
 }
 interface IOutputData {
-    type: string;
+    task: string;
     payload: IPayload;
 }
 const chatBoxes: TChatBoxes = {}; 
@@ -41,7 +41,7 @@ const validiateChatBox = async (name: string, participants) => {
         (["users", {path: 'messages', populate: 'sender' }]);
 }
 const sendData = (data: IOutputData, ws: IWebSocket) => {ws.send(JSON.stringify(data)); }
-const sendStatus = (status: IStatus, ws: IWebSocket) => {sendData(["status", status], ws); }
+const sendStatus = (status: IStatus, ws: IWebSocket) => {sendData({task: "status", payload: status}, ws); }
 
 export default {
     onMessage: (wss: WebSocket.Server,ws: IWebSocket) => (
@@ -72,7 +72,7 @@ export default {
                                 return {name: ((msg.sender as IUser).name as string), body: msg.body}
                             })};
                             console.log(`output = ${output}`);
-                            sendData({type: 'ChatOut', payload: output}, ws);
+                            sendData({task: 'ChatOut', payload: output}, ws);
                             sendStatus({type: 'success', msg: 'Chatbox created.'}, ws);
                         }
                     }

@@ -23,7 +23,9 @@ db.once('open', () => {
         // console.log(ws)
         ws.id = uuidv4(); // Assign a unique ID to each client
         ws.box= ''; //keep track of the current chatroom
-        ws.onmessage = wsConnect.onMessage(wss,ws);
+        ws.onmessage = () =>{
+            wsConnect.onMessage(wss,ws);
+        }
     });
 });
 const PORT :string = process.env.PORT || "4000";
