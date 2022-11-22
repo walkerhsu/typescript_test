@@ -15,17 +15,17 @@ export interface IStatus {
     type?: string;
     msg?: string;
 }
-export interface IsingleMsg {
+export interface ISingleMsg {
     name: string;
     body: string;
 }
 export interface IMessage {
-    [key: string]: IsingleMsg[];
+    [key: string]: ISingleMsg[];
 }
 export interface IPayload{
     name?: string; // username
     to?: string; // friend name
-    body?: string | IsingleMsg[]; // message body
+    body?: string | ISingleMsg[]; // message body
     type?: string; // status type
     msg?: string; // status message
 }
@@ -33,7 +33,6 @@ export interface IData {
     task: string;
     payload: IPayload;
 }
-
 export interface IUseChatProps {
     children: JSX.Element;
 }

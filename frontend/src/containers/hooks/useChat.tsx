@@ -4,7 +4,6 @@ import { message } from 'antd'
 import {ContextInterface} from "../interface";
 import {IStatus} from "../interface";
 import {IMessage} from "../interface";
-import {IPayload} from "../interface";
 import {IData} from "../interface";
 import {IUseChatProps} from "../interface";
 import {ITask_Payload} from "../interface";
@@ -85,8 +84,6 @@ const ChatProvider = (props: IUseChatProps)=> {
     };
     
     client.onmessage = (byteString) => {
-        // let task: string
-        // let payload: IPayload;
         const { data } = byteString;
         
         const {task, payload}: ITask_Payload = JSON.parse(data);
