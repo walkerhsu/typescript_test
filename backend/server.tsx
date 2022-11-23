@@ -1,6 +1,5 @@
-import http from 'http'
+import http from 'https'
 import express from 'express'
-import dotenv from 'dotenv-defaults'
 import mongoose from 'mongoose'
 import {v4 as uuidv4} from 'uuid'
 import WebSocket from 'ws'
