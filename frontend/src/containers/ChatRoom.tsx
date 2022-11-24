@@ -8,8 +8,7 @@ import Title from '../components/Title';
 import ChatModal from '../components/chatModals';
 import Message from "../components/Message";
 
-import { IsingleMsg } from "./interface";
-
+import { ISingleMsg } from "../../../interface";
 const ChatBoxesWrapper = styled(Tabs)`
     height: 300px;
     width: 100%;
@@ -60,13 +59,13 @@ const ChatRoom = ({me}: ChatRoomProps) =>{
         };
         return -1;
     }
-    const displayChat = (chat: IsingleMsg[]) => {
+    const displayChat = (chat: ISingleMsg[]) => {
         console.log(`msg  = ${chat}`);
         return (chat.length === 0 ? (
             <p style={{ color: '#ccc' }}> No messages... </p>
         ) : (
             <ChatBoxWrapper>
-                {chat.map(({ name, body }: IsingleMsg, i: number) => (
+                {chat.map(({ name, body }: ISingleMsg, i: number) => (
                     <Message isMe={name === me} message={body} />
                 ))}
                 <FootRef ref={msgFooter}/>

@@ -1,3 +1,4 @@
+import {ISingleMsg, IStatus, IPayload} from '../../../interface';
 export interface ContextInterface {
     status: IStatus;
     me: string,
@@ -11,23 +12,9 @@ export interface ContextInterface {
     startChat : (name: string, to: string) => void,
     displayStatus: (s: IStatus) => void,
 }
-export interface IStatus {
-    type?: string;
-    msg?: string;
-}
-export interface ISingleMsg {
-    name: string;
-    body: string;
-}
+
 export interface IMessage {
     [key: string]: ISingleMsg[];
-}
-export interface IPayload{
-    name?: string; // username
-    to?: string; // friend name
-    body?: string | ISingleMsg[]; // message body
-    type?: string; // status type
-    msg?: string; // status message
 }
 export interface IData {
     task: string;

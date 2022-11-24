@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState} from "react"
 import React from "react";
 import { message } from 'antd'
 import {ContextInterface} from "../interface";
-import {IStatus} from "../interface";
+import {IStatus} from "../../../../interface";
 import {IMessage} from "../interface";
 import {IData} from "../interface";
 import {IUseChatProps} from "../interface";

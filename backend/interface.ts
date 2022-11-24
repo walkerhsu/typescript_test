@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import mongoose from 'mongoose';
 
-import {IPayload, IStatus, ISingleMsg} from '../frontend/src/containers/interface';
+import {IPayload, IStatus, ISingleMsg} from '../interface';
 
 
 export interface IWebSocket extends WebSocket.WebSocket {

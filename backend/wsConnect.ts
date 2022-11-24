@@ -29,7 +29,7 @@ const validiateUser = async (name: string) => {
     }
     return user.populate<{chatBoxes: IChatBox}>("chatBoxes");
 }
-const validiateChatBox = async (name: string, participants) => {   
+const validiateChatBox = async (name: string, participants: any) => {   
     console.log("validating ChatBox" + name); 
     let box = await ChatBoxModel.findOne({ name });
     if (!box){
@@ -45,6 +45,7 @@ const sendStatus = (status: IStatus, ws: IWebSocket) => {sendData({task: "status
 
 export default {
     onMessage: (wss: WebSocket.Server,ws: IWebSocket) => (
+        console.log("onMessage"),
         async (byteString: IInputJSONData) => {
             const { data } = byteString
             const {task, payload}: IInputData = JSON.parse(data);
